@@ -253,15 +253,6 @@ def _find_include_dir(self: pil_build_ext, dirname: str, include: str) -> bool |
     return False
 
 
-def _cmd_exists(cmd: str) -> bool:
-    if "PATH" not in os.environ:
-        return False
-    return any(
-        os.access(os.path.join(path, cmd), os.X_OK)
-        for path in os.environ["PATH"].split(os.pathsep)
-    )
-
-
 def _pkg_config(name: str) -> tuple[list[str], list[str]] | None:
     command = os.environ.get("PKG_CONFIG", "pkg-config")
     for keep_system in (True, False):
@@ -474,7 +465,7 @@ class pil_build_ext(build_ext):
         include_dirs: list[str] = []
 
         pkg_config = None
-        if _cmd_exists(os.environ.get("PKG_CONFIG", "pkg-config")):
+        if shutil.which(os.environ.get("PKG_CONFIG", "pkg-config"), os.X_OK) != None:
             pkg_config = _pkg_config
 
         #
