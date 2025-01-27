@@ -465,7 +465,10 @@ class pil_build_ext(build_ext):
         include_dirs: list[str] = []
 
         pkg_config = None
-        if shutil.which(os.environ.get("PKG_CONFIG", "pkg-config"), os.X_OK) is not None:
+        if (
+            shutil.which(os.environ.get("PKG_CONFIG", "pkg-config"), os.X_OK)
+            is not None
+        ):
             pkg_config = _pkg_config
 
         #
